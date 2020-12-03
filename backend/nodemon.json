@@ -1,0 +1,8 @@
+{
+  "env": {
+    "PORT": 5000,
+    "MONGO_USER_NAME": "shreha",
+    "MONGO_PASSWORD": "QTGCkmAenVLfEUgn",
+    "MONGO_DB": "proshop"
+  }
+}

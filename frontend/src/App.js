@@ -8,6 +8,7 @@ import Switch from "react-bootstrap/esm/Switch";
 import ProductScreen from "./screens/ProductScreen";
 import { Provider } from "react-redux";
 import store from "./store";
+import CartScreen from "./screens/CartScreen";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Switch>
               <Route path="/" exact component={HomeScreen} />
               <Route path="/product/:id" exact component={ProductScreen} />
+              <Route path="/cart/:id?" exact component={CartScreen} />
             </Switch>
           </Container>
         </main>

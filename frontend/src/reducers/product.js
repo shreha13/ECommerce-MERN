@@ -35,7 +35,6 @@ const productReducer = (state = initialState, { type, payload }) => {
         error: payload,
       };
     case GET_PRODUCT:
-        debugger;
       return {
         ...state,
         loading: false,

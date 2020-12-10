@@ -24,7 +24,6 @@ export const getProducts = () => {
 };
 
 export const getProductById = (id) => {
-    debugger;
   return async (dispatch) => {
     dispatch({
       type: GET_PRODUCTS_START,

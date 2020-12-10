@@ -1,4 +1,41 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
+const { check } = require("express-validator");
+const { login, getProfile, registerUser } = require("../controllers/userController");
+const authMiddleware = require("../middleware/authMiddleware");
 
-module.exports = router
+//@desc login user
+//@route Post /api/users/login
+//@access public
+router.post(
+  "/login",
+  [
+    check("email", "Please enter a valid email address or password.").isEmail(),
+    check("password", "Please enter a valid email address or password.")
+      .trim()
+      .isLength({ min: 6 }),
+  ],
+  login
+);
+
+//@desc GEt user profile
+//@route Get /api/users/profile
+//@access private
+router.get("/profile", authMiddleware, getProfile);
+
+//@desc register user
+//@route Post /api/users/register
+//@access private
+router.post(
+  "/register",
+  [
+    check("email", "Please enter a valid email address.").isEmail(),
+    check("password", "Please enter a password with min of 6 characters.")
+      .trim()
+      .isLength({ min: 6 }),
+    check("name", "Name is required").trim().not().isEmpty(),
+  ],
+  registerUser
+);
+
+module.exports = router;

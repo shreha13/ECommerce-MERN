@@ -9,7 +9,14 @@ const cartItemFromStorage = localStorage.getItem("cartItems")
   ? JSON.parse(localStorage.getItem("cartItems"))
   : [];
 
-const initialState = { cart: { cartItems: cartItemFromStorage } };
+const userFromStorage = localStorage.getItem("user")
+  ? JSON.parse(localStorage.getItem("user"))
+  : null;
+
+const initialState = {
+  cart: { cartItems: cartItemFromStorage },
+  auth: { user: userFromStorage },
+};
 
 const store = createStore(
   rootReducer,

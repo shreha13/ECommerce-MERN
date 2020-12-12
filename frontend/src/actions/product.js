@@ -17,7 +17,7 @@ export const getProducts = () => {
     } catch (error) {
       dispatch({
         type: GET_PRODUCTS_FAIL,
-        payload: error.message,
+        payload: error.response? error.response.data.message: error.message,
       });
     }
   };
@@ -39,7 +39,7 @@ export const getProductById = (id) => {
     } catch (error) {
       dispatch({
         type: GET_PRODUCTS_FAIL,
-        payload: error.message,
+        payload:  error.response? error.response.data.message: error.message,
       });
     }
   };

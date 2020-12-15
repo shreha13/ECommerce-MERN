@@ -4,6 +4,7 @@
     "MONGO_USER_NAME": "shreha",
     "MONGO_PASSWORD": "QTGCkmAenVLfEUgn",
     "MONGO_DB": "proshop",
-    "JWT_SECRET": "supersecretkey"
+    "JWT_SECRET": "supersecretkey",
+    "PAYPAL_CLIENT_ID": "AfhA8lr3hf6rMJpkGBK7ZDBJB_aIIS2iPBdS1FrBtJSnBfuUXXxmEUXI6CaSjch5b03fFBq7IE-k3ZVS"
   }
 }

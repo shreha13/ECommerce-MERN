@@ -1,5 +1,13 @@
 import axios from "axios";
-import { CART_ITEM_ADD, CART_ITEM_FAIL, CART_ITEM_LOADING, CART_ITEM_REMOVE } from "./types";
+import {
+  CART_ITEM_ADD,
+  CART_ITEM_FAIL,
+  CART_ITEM_LOADING,
+  CART_ITEM_REMOVE,
+  CART_SAVE_ADDRESS,
+  CART_SAVE_PAYMENT_METHOD,
+  CLEAR_MESSAGE_CART
+} from "./types";
 
 export const addItemsToCart = (id, qty) => {
   return async (dispatch, getState) => {
@@ -28,8 +36,14 @@ export const addItemsToCart = (id, qty) => {
     } catch (error) {
       dispatch({
         type: CART_ITEM_FAIL,
-        payload: error.message
-      })
+        payload: error.message,
+      });
+
+      setTimeout(() => {
+        dispatch({
+          type: CLEAR_MESSAGE_CART,
+        });
+      }, 5000);
     }
   };
 };
@@ -43,7 +57,7 @@ export const removeItemsFromCart = (id) => {
 
       dispatch({
         type: CART_ITEM_REMOVE,
-        payload: id
+        payload: id,
       });
 
       localStorage.setItem(
@@ -53,8 +67,36 @@ export const removeItemsFromCart = (id) => {
     } catch (error) {
       dispatch({
         type: CART_ITEM_FAIL,
-        payload: error.message
-      })
+        payload: error.message,
+      });
+
+      setTimeout(() => {
+        dispatch({
+          type: CLEAR_MESSAGE_CART,
+        });
+      }, 5000);
     }
+  };
+};
+
+export const saveShippingAddress = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: CART_SAVE_ADDRESS,
+      payload: data,
+    });
+
+    localStorage.setItem("shippingAddress", JSON.stringify(data));
+  };
+};
+
+export const savePaymentMethod = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: CART_SAVE_PAYMENT_METHOD,
+      payload: data,
+    });
+
+    localStorage.setItem("paymentMethod", JSON.stringify(data));
   };
 };

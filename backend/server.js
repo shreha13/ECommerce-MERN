@@ -2,6 +2,7 @@ const express = require("express");
 
 const users = require("./routes/users");
 const products = require("./routes/products");
+const orders = require("./routes/orders");
 const mongoose = require("mongoose");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 require("./models/productModel");
@@ -17,10 +18,16 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Methods", "*");
 
   next();
+  0;
 });
 
 app.use("/api/users", users);
 app.use("/api/products", products);
+app.use("/api/orders", orders);
+0;
+app.get("/api/config/paypal", (req, res) =>
+  res.json(process.env.PAYPAL_CLIENT_ID)
+);
 
 app.use(notFound);
 app.use(errorHandler);

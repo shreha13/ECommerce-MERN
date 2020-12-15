@@ -3,12 +3,16 @@ const {
   CART_ITEM_LOADING,
   CART_ITEM_REMOVE,
   CART_ITEM_FAIL,
+  CART_SAVE_ADDRESS,
+  CART_SAVE_PAYMENT_METHOD,
+  CLEAR_MESSAGE_CART,
 } = require("../actions/types");
 
 const initialState = {
   cartItems: [],
   error: null,
   loading: false,
+  shippingAddress: {},
 };
 
 const cartReducer = (state = initialState, { type, payload }) => {
@@ -16,7 +20,6 @@ const cartReducer = (state = initialState, { type, payload }) => {
     case CART_ITEM_ADD:
       const item = payload;
       const itemExist = state.cartItems.find((i) => i.product === item.product);
-      debugger;
       if (itemExist) {
         return {
           ...state,
@@ -43,14 +46,29 @@ const cartReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         cartItems: [...state.cartItems.filter((i) => i.product !== payload)],
-        loading: false
+        loading: false,
       };
     case CART_ITEM_FAIL:
       return {
         ...state,
         cartItems: [],
         loading: false,
-        error: payload
+        error: payload,
+      };
+    case CART_SAVE_ADDRESS:
+      return {
+        ...state,
+        shippingAddress: payload,
+      };
+    case CLEAR_MESSAGE_CART:
+      return {
+        ...state,
+        error: null,
+      };
+    case CART_SAVE_PAYMENT_METHOD:
+      return {
+        ...state,
+        paymentMethod: payload,
       };
     default:
       return state;

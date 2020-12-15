@@ -32,6 +32,15 @@ export const loginUser = (email, password) => {
       });
 
       localStorage.setItem("user", JSON.stringify(data));
+      dispatch(getProfile());
+
+      setTimeout(() => {
+        dispatch({
+          type: LOGOUT_USER,
+        });
+
+        localStorage.removeItem("user");
+      }, 3600000);
     } catch (error) {
       dispatch({
         type: LOGIN_USER_FAIL,
@@ -77,6 +86,15 @@ export const registerUser = (email, password, name, isAdmin = false) => {
       });
 
       localStorage.setItem("user", user.data);
+      dispatch(getProfile());
+
+      setTimeout(() => {
+        dispatch({
+          type: LOGOUT_USER,
+        });
+
+        localStorage.removeItem("user");
+      }, 3600000);
     } catch (error) {
       dispatch({
         type: LOGIN_USER_FAIL,
@@ -126,6 +144,7 @@ export const updateUserProfile = (email, name, password, isAdmin = false) => {
         isAdmin,
         name,
       };
+
       if (password !== "") {
         userModel = {
           email,
@@ -145,11 +164,21 @@ export const updateUserProfile = (email, name, password, isAdmin = false) => {
         payload: userProfile.data,
       });
 
+      localStorage.setItem("user", user.data);
+
       setTimeout(() => {
         dispatch({
-          type: CLEAR_MESSAGE
-        })
+          type: CLEAR_MESSAGE,
+        });
       }, 5000);
+
+      setTimeout(() => {
+        dispatch({
+          type: LOGOUT_USER,
+        });
+
+        localStorage.removeItem("user");
+      }, 3600000);
     } catch (error) {
       dispatch({
         type: UPDATE_USER_FAIL,

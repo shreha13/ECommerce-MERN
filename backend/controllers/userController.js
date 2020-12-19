@@ -165,3 +165,66 @@ exports.updateProfile = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.getUsers = async (req, res, next) => {
+  try {
+    const users = await userModel.find();
+    return res.json(users);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getUserById = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const user = await userModel.findById(id).select("-password");
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+    return res.json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.deleteUser = async (req, res, next) => {
+  try {
+    const user = req.params.user;
+    const users = await userModel.find();
+    const deleteUser = users.find((i) => i._id.toString() === user.toString());
+    if (deleteUser) {
+      await userModel.deleteOne({ _id: user });
+      const otherUsers = users.filter((i) => i._id !== deleteUser._id);
+      return res.json(otherUsers);
+    } else {
+      return res.json(404).json({ message: "User not found." });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.updateUser = async (req, res, next) => {
+  const id = req.params.id;
+  try {
+    const user = await userModel.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    user.isAdmin = req.body.isAdmin;
+
+    const updatedUser = await user.save();
+    return res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

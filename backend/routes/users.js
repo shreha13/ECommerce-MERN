@@ -6,7 +6,12 @@ const {
   getProfile,
   registerUser,
   updateProfile,
+  getUsers,
+  deleteUser,
+  getUserById,
+  updateUser,
 } = require("../controllers/userController");
+const adminMiddleware = require("../middleware/adminMiddleware");
 const authMiddleware = require("../middleware/authMiddleware");
 
 //@desc login user
@@ -56,5 +61,25 @@ router.post(
   ],
   registerUser
 );
+
+//@desc GEt all users
+//@route GET /api/users
+//@access private
+router.get("/", adminMiddleware, getUsers);
+
+//@desc delete  user
+//@route delete /api/users/:user
+//@access private
+router.delete("/:user", adminMiddleware, deleteUser);
+
+//@desc get  user by id
+//@route get /api/users/:id
+//@access private/admin
+router.get("/:id", adminMiddleware, getUserById);
+
+//@desc  update  user by id
+//@route put /api/users/:id
+//@access private/admin
+router.put("/:id", adminMiddleware, updateUser);
 
 module.exports = router;

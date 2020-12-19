@@ -16,6 +16,8 @@ import ShippingScreen from "./screens/ShippingScreen";
 import PaymentScreen from "./screens/PaymentScreen";
 import PlaceOrder from "./screens/PlaceOrder";
 import OrderScreen from "./screens/OrderScreen";
+import UserListScreen from "./screens/UserListScreen";
+import UserEditScreen from "./screens/UserEditScreen";
 
 function App() {
   return (
@@ -35,6 +37,8 @@ function App() {
               <Route path="/product/:id" exact component={ProductScreen} />
               <Route path="/cart/:id?" exact component={CartScreen} />
               <Route path="/orders/:id" exact component={OrderScreen} />
+              <Route path="/admin/users" exact component={UserListScreen} />
+              <Route path="/admin/users/:id" exact component={UserEditScreen} />
             </Switch>
           </Container>
         </main>

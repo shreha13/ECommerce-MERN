@@ -38,7 +38,7 @@ const OrderScreen = ({ match }) => {
         setSdkReady(true);
       }
     }
-  }, [dispatch, id, order, sdkReady]);
+  }, [dispatch, id, order, successPay, sdkReady]);
 
   useEffect(() => {
     return () => dispatch({ type: ORDER_RESET });

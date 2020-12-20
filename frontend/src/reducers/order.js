@@ -11,6 +11,10 @@ import {
   PAY_ORDER_SUCCESS,
   ORDER_PAY_RESET,
   ORDER_RESET,
+  GET_ALL_ORDERS_SUCCESS,
+  GET_ALL_ORDERS_FAIL,
+  DELIVER_ORDERS_FAIL,
+  DELIVER_ORDERS_SUCESS,
 } from "../actions/types";
 
 const initialState = {
@@ -73,6 +77,7 @@ const orderReducer = (state = initialState, { type, payload }) => {
         successPay: true,
       };
     case GET_ORDERS_FAIL:
+    case GET_ALL_ORDERS_FAIL:
       return {
         ...state,
         error: payload,
@@ -94,6 +99,7 @@ const orderReducer = (state = initialState, { type, payload }) => {
         loadingPay: false,
       };
     case GET_ORDERS_SUCCESS:
+    case GET_ALL_ORDERS_SUCCESS:
       return {
         ...state,
         orders: payload,
@@ -105,6 +111,21 @@ const orderReducer = (state = initialState, { type, payload }) => {
         ...state,
         error: payload,
         loading: false,
+      };
+    case DELIVER_ORDERS_SUCESS:
+      return {
+        ...state,
+        success: true,
+        loading: false,
+        orders: state.orders.map((i) => {
+          return i._id !== payload._id ? i : payload;
+        }),
+      };
+    case DELIVER_ORDERS_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: payload,
       };
     default:
       return state;

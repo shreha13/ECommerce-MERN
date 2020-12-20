@@ -3,6 +3,10 @@ import {
   CREATE_ORDER_FAIL,
   CREATE_ORDER_LOAD,
   CREATE_ORDER_SUCCESS,
+  DELIVER_ORDERS_FAIL,
+  DELIVER_ORDERS_SUCESS,
+  GET_ALL_ORDERS_FAIL,
+  GET_ALL_ORDERS_SUCCESS,
   GET_ORDERS_FAIL,
   GET_ORDERS_SUCCESS,
   GET_ORDER_FAIL,
@@ -126,4 +130,56 @@ export const payOrder = (id, paymentResult) => {
       });
     }
   };
+};
+
+export const getAllOrders = () => async (dispatch, getState) => {
+  dispatch({
+    type: CREATE_ORDER_LOAD
+  })
+  const auth = getState().auth;
+  try {
+    const token = auth.user.token;
+
+    const { data } = await axios.get("/api/orders/all", {
+      headers: {
+        "x-auth-header": `Bearer ${token}`,
+      },
+    });
+
+    dispatch({
+      type: GET_ALL_ORDERS_SUCCESS,
+      payload: data
+    })
+  } catch (error) {
+    dispatch({
+      type: GET_ALL_ORDERS_FAIL,
+      payload: error.response ? error.response.data.message : error.message,
+    });
+  }
+};
+
+export const deliverOrder = (id) => async (dispatch, getState) => {
+  dispatch({
+    type: CREATE_ORDER_LOAD
+  })
+  const auth = getState().auth;
+  try {
+    const token = auth.user.token;
+
+    const { data } = await axios.put(`/api/orders/${id}/deliver`, {}, {
+      headers: {
+        "x-auth-header": `Bearer ${token}`,
+      },
+    });
+
+    dispatch({
+      type: DELIVER_ORDERS_SUCESS,
+      payload: data
+    })
+  } catch (error) {
+    dispatch({
+      type: DELIVER_ORDERS_FAIL,
+      payload: error.response ? error.response.data.message : error.message,
+    });
+  }
 };

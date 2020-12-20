@@ -1,4 +1,4 @@
-const express = require("express");
+const express = require("express")
 
 const router = express.Router();
 
@@ -8,7 +8,9 @@ const {
   getOrders,
   updatePaidStatus,
   updateDeliveredStatus,
+  getAllOrders,
 } = require("../controllers/orderController");
+const adminMiddleware = require("../middleware/adminMiddleware");
 const authMiddleware = require("../middleware/authMiddleware");
 
 //@desc create order
@@ -20,6 +22,11 @@ router.post("/", authMiddleware, createOrder);
 //@route Get /api/orders
 //@access private
 router.get("/", authMiddleware, getOrders);
+
+//@desc get all orders
+//@route GET /api/orders/all
+//@access private
+router.get("/all", adminMiddleware, getAllOrders);
 
 //@desc get orders by id
 //@route GET /api/orders/:id
@@ -34,6 +41,6 @@ router.put("/:id/pay", authMiddleware, updatePaidStatus);
 //@desc get orders by id and deliver
 //@route GET /api/orders/:id/deliver
 //@access private
-router.put("/:id/deliver", authMiddleware, updateDeliveredStatus);
+router.put("/:id/deliver", adminMiddleware, updateDeliveredStatus);
 
 module.exports = router;

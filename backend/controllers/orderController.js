@@ -1,4 +1,5 @@
 const orderModel = require("../models/orderModel");
+const userModel = require("../models/userModel");
 
 exports.createOrder = async (req, res, next) => {
   const {
@@ -50,6 +51,8 @@ exports.getOrderById = async (req, res, next) => {
   try {
     const orderId = req.params.id;
 
+    const user = await userModel.findById(req.user);
+
     const order = await orderModel
       .findById(orderId)
       .populate("user", ["name", "email"]);
@@ -58,7 +61,10 @@ exports.getOrderById = async (req, res, next) => {
       return res.status(404).json({ message: "Not Found" });
     }
 
-    if (order.user._id.toString() !== req.user.toString()) {
+    if (
+      order.user._id.toString() !== req.user.toString() &&
+      !user.isAdmin
+    ) {
       return res.status(401).json({ message: "Authorization failed." });
     }
     res.json(order);
@@ -74,13 +80,10 @@ exports.updatePaidStatus = async (req, res, next) => {
   try {
     const id = req.params.id;
 
-    const order = await orderModel.findOne(
-      {
-        _id: id,
-        user: req.user,
-      },
-      { isPaid: true }
-    );
+    const order = await orderModel.findOne({
+      _id: id,
+      user: req.user,
+    });
 
     if (!order) {
       return res.status(404).json({ message: "Not Found" });
@@ -110,13 +113,7 @@ exports.updateDeliveredStatus = async (req, res, next) => {
   try {
     const id = req.params.id;
 
-    const order = await orderModel.findOne(
-      {
-        _id: id,
-        user: req.user,
-      },
-      { isPaid: true }
-    );
+    const order = await orderModel.findById(id);
 
     if (!order) {
       return res.status(404).json({ message: "Not Found" });
@@ -125,7 +122,6 @@ exports.updateDeliveredStatus = async (req, res, next) => {
     order.isDelivered = true;
     order.deliveredAt = Date.now();
 
-
     const updatedOrder = await order.save();
 
     return res.json(updatedOrder);
@@ -133,6 +129,15 @@ exports.updateDeliveredStatus = async (req, res, next) => {
     if (error.kind === "ObjectId") {
       return res.status(404).json({ message: "Not Found." });
     }
+    next(error);
+  }
+};
+
+exports.getAllOrders = async (req, res, next) => {
+  try {
+    const orders = await orderModel.find().populate("user", ["name", "email"]);
+    return res.json(orders);
+  } catch (error) {
     next(error);
   }
 };

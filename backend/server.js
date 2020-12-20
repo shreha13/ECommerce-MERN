@@ -1,8 +1,9 @@
 const express = require("express");
-
+const path = require("path");
 const users = require("./routes/users");
 const products = require("./routes/products");
 const orders = require("./routes/orders");
+const uploads = require("./routes/uploads");
 const mongoose = require("mongoose");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 require("./models/productModel");
@@ -24,10 +25,13 @@ app.use((req, res, next) => {
 app.use("/api/users", users);
 app.use("/api/products", products);
 app.use("/api/orders", orders);
-0;
+app.use("/api/upload", uploads);
+
 app.get("/api/config/paypal", (req, res) =>
   res.json(process.env.PAYPAL_CLIENT_ID)
 );
+
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 app.use(notFound);
 app.use(errorHandler);
